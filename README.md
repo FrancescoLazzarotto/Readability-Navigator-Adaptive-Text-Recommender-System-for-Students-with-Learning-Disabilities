@@ -5,7 +5,7 @@
 
 ## Overview
 
-**Readability-Navigator** is an academic project developed at the **University of Turin** for the course *“Personalized and secure Web || Artificial Intelligence”*.  
+**Readability-Navigator** is an academic project developed at the **University of Turin** for the courses *“Personalized and secure Web || Artificial Intelligence”*.  
 The goal is to support students with **dyslexia or reading difficulties (DSA)** through a **personalized recommender system** that suggests texts matching both their **interests** and **reading ability**.
 
 Instead of simplifying text, the system **selects the next best document** whose topic and difficulty are optimal for the user's cognitive level.  
