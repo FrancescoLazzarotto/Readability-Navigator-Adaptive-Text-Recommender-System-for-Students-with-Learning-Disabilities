@@ -1,6 +1,3 @@
-# Readability-Navigator-Adaptive-Text-Recommender-System-for-Students-with-Learning-Disabilities
-
-
 #  Readability-Navigator  
 ### Adaptive Text Recommender System for Students with Learning Disabilities
 
