@@ -2,6 +2,12 @@ import json
 import pandas as pd
 import os
 import pickle
+import yaml
+
+
+def load_yamal():
+    with open('project.yamal', 'r') as file:
+        return yaml.safe_load(file)
 
 def load_json(path):
     with open(path, "r", encoding="utf-8") as f:
