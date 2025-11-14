@@ -1,4 +1,5 @@
-import numpy as np 
+import numpy as np
+import pandas as pd 
 
 def user_model(user_id, chosen_cluster, df, embedding, default_readability = 60):
     
