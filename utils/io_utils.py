@@ -6,7 +6,7 @@ import yaml
 
 
 def load_yamal():
-    with open('C:\Users\checc\Readability-Navigator\conf\project.yaml', 'r') as file:
+    with open(r'C:\Users\checc\Readability-Navigator\conf\project.yaml', 'r') as file:
         return yaml.safe_load(file)
 
 def load_json(path):

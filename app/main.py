@@ -11,15 +11,15 @@ import numpy as np
 
 def load_utils():
     config = load_yamal()
-    path = "data/processed/onestop_nltk_features.csv"
+    path = (r"data/processed/onestop_nltk_features.csv")
     df = load_csv(path)
 
-    pickle_file = "src/features/similarity_embedding.picle"
+    pickle_file = (r"src/features/doc_embedding.pickle")
     embedding = load_pickle(pickle_file)
 
     return config, df, embedding
-_,df,_ = load_utils()
-df.head() 
+
+
 
 def main():
     config, df, embedding = load_utils()
@@ -29,7 +29,7 @@ def main():
         "topic_vector": list(np.random.rand(384)),
         "history": []
     }
-    doc_id = 1
+    doc_id = "Amazon-Ele_easy"
 
     engine = RecommenderEngine(
         df=df,
@@ -46,5 +46,5 @@ def main():
     print("Top K Recommendations:", rank)
 
 
-#if __name__ == "__main__":
- #   main()
+if __name__ == "__main__":
+    main()
