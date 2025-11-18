@@ -22,7 +22,9 @@ embedding = np.random.rand(3, 384)
 config = {
     "eta": 1.0,
     "zeta": 0.8,
-    "alpha": 0.4
+    "alpha": 0.4,
+    "k": 2,
+    "tol": 999
 }
 
 user = {
@@ -44,5 +46,7 @@ engine = RecommenderEngine(
 
 doc_id = 1
 score = engine.recommender(user, doc_id)
+rank = engine.rank_top_k(user)
 
 print("Score:", score)
+print("Rank:", rank)

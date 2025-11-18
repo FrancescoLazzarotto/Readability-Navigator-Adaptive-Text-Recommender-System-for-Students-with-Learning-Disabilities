@@ -42,7 +42,7 @@ class RecommenderEngine():
     def get_flesch(self, doc_id):
         idx = self.df.index[self.df["id"] == doc_id]
         if len(idx) == 0:
-            raise ValueError("Document not found")
+            raise ValueError("Documento non trovato")
         return float(self.df.loc[idx[0], "flesch_score"])
 
     def gap_readability(self, user, flesch):
@@ -53,7 +53,8 @@ class RecommenderEngine():
     def penalty(self, target, readability, alpha):
         if readability > target:
             return 1 + alpha
-        return 1
+        else:
+            return 1
         
     def theme_similarity(self, user, doc_id):
         topic_vector = np.array(user['topic_vector']).reshape(1, -1)
@@ -78,6 +79,25 @@ class RecommenderEngine():
         score = eta * sim - zeta  * gap_penalized
         return score         
 
+    def rank_top_k(self, user):
+        config = self.config
+        k = config['k']
+        profile = user
+        catalog = self.catalog(profile)
+        
+        scores = []
+        
+        for doc_id in catalog['id'].tolist():
+            score = self.recommender(user, doc_id)
+            scores.append((doc_id, score))
+        
+        scores.sort(key=lambda x: x[1], reverse=True)
+        
+        return scores[:k]
+        
+        
+        
+        
 
         
 
