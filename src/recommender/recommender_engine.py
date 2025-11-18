@@ -1,26 +1,22 @@
 import os
 import pandas as pd
 import numpy as np 
-from user.model_user import user_model
-from utils.io_utils import load_yamal, load_json, save_json, load_pickle
+from src.user.model_user import user_model
+from utils.io_utils import load_json, save_json
 from sklearn.metrics.pairwise import cosine_similarity
-from utils.config_loader import load_config 
+
 
 
 
 class RecommenderEngine():
-    def __init__(self, df, embedding, config, user_id, profile_path, flusch_ease):
+    def __init__(self, df, embedding, config, user_id, profile_path):
         self.df = df
         self.embedding = embedding
-        #self.config = config
+        self.config = config
         self.user_id = user_id
         self.profile_path = profile_path
-        self.flusch = flusch_ease
+        
     
-    def yamal(self):
-        config = load_config()
-        return config 
-
     def profile(self):
         if os.path.exists(self.profile_path):
             return load_json(self.profile_path)
@@ -44,22 +40,20 @@ class RecommenderEngine():
         return testo, emb
 
     def get_flesch(self, doc_id):
-         idx = self.df.index[self.df["id"] == doc_id[0]]
-         flesch = self.df.loc[idx, "flesch_score"]
-         return flesch
-         
+        idx = self.df.index[self.df["id"] == doc_id]
+        if len(idx) == 0:
+            raise ValueError("Document not found")
+        return float(self.df.loc[idx[0], "flesch_score"])
+
     def gap_readability(self, user, flesch):
-        target_readability = user['target_readability']
-        readability = flesch 
-        gap = abs(target_readability - readability) 
-        return gap, target_readability, readability 
-    
-    def penality(self):
-        if self.target_readability < self.readability:
-            score_penality = True
-        elif self.target_readability > self.readability:
-            score_penality = False 
-        return score_penality
+        target = user['target_readability']
+        gap = abs(target - flesch)
+        return gap, target, flesch
+
+    def penalty(self, target, readability, alpha):
+        if readability > target:
+            return 1 + alpha
+        return 1
         
     def theme_similarity(self, user, doc_id):
         topic_vector = np.array(user['topic_vector']).reshape(1, -1)
@@ -68,14 +62,20 @@ class RecommenderEngine():
         sim_score = cosine_similarity(topic_vector, emb)[0][0]
         return sim_score
         
-    def recommender(self, user, doc_id, flesch):
-        config = self.yamal()
-        sim = self.theme_similarity(user, doc_id)
-        gap = self.gap_readability5(user, flesch)
-        k = config['k']
+    def recommender(self, user, doc_id):
+        config = self.config
         eta = config['eta']
         zeta = config['zeta']
-        score = eta * sim - zeta  * gap
+        alpha = config['alpha']
+        
+        flesch = self.get_flesch(doc_id)
+        sim = self.theme_similarity(user, doc_id)
+        gap, target, readability = self.gap_readability(user, flesch)
+        
+        penalty_score = self.penalty(target, readability, alpha)
+        gap_penalized = gap * penalty_score
+        
+        score = eta * sim - zeta  * gap_penalized
         return score         
 
 
