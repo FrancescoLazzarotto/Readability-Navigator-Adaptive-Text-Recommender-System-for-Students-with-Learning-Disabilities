@@ -35,7 +35,8 @@ def user_form():
         "user_id": user_id,
         "target_readability": target,
         "topic_vector": topic_vec,
-        "history": []
+        "history": [],
+        "profile_path": None
     }
 
-    return submitted, user
+    return submitted

@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np 
 from src.user.model_user import user_model
-from utils.io_utils import load_json, save_json
+from utils.io_utils import load_json
 from sklearn.metrics.pairwise import cosine_similarity
 
 
@@ -17,12 +17,12 @@ class RecommenderEngine():
         
     
     def profile(self):
-        if os.path.exists(self.profile_path):
-            return load_json(self.profile_path)
-        chosen_cluster = self.df["topic_cluster"].unique().tolist()[:3]
-        profile = user_model(self.user_id, chosen_cluster, self.df, self.embedding)
-        save_json(profile, self.profile_path)
-        return profile
+        if self.profile_path and os.path.exists(self.profile_path):
+                return load_json(self.profile_path)
+
+        return None
+        
+        
 
     def catalog(self, profile):
         tol = self.config["tol"]

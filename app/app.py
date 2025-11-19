@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -11,10 +12,15 @@ render_sidebar()
 
 page_header("Readability Navigator", "Generatore di raccomandazioni")
 
-submitted, user = user_form()
+submitted = user_form()
 
 divider()
-
+user = {
+        "user_id": 10,
+        "target_readability": 60,
+        "topic_vector": list(np.random.rand(384)),
+        "history": []
+    }
 if submitted:
-    df = main()
+    df = main(user)
     st.dataframe(df)

@@ -23,14 +23,15 @@ def load_utils():
 
 
 
-def main():
+def main(user):
     config, df, embedding = load_utils()
-    user = {
+    """user = {
         "user_id": 10,
         "target_readability": 60,
         "topic_vector": list(np.random.rand(384)),
         "history": []
     }
+    """
     #doc_id = "Amazon-Ele_easy"
 
     engine = RecommenderEngine(
@@ -38,7 +39,7 @@ def main():
         embedding=embedding,
         config=config,
         user_id=user['user_id'],
-        profile_path="user10.json"
+        profile_path= None
     )
     
 
@@ -49,10 +50,17 @@ def main():
     #print("Score:", score)
     #print("Top K Recommendations:", rank)
     #rank.to_csv('test3.csv', index=True)
-    return rank['testo']
+    return rank
     
     
+user = {
+        "user_id": 10,
+        "target_readability": 60,
+        "topic_vector": list(np.random.rand(384)),
+        "history": []
+    }
+
 if __name__ == "__main__":
-    main()
+    main(user)
 
 
