@@ -8,3 +8,5 @@ alpha: 0.4
 paths:
   features_csv: "data/processed/onestop_nltk_features.csv"
   embeddings_pickle: "src/features/doc_embedding.pickle"
+  user_json: "user/json_files/"
+  

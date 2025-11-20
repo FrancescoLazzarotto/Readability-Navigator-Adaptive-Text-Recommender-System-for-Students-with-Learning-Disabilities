@@ -22,7 +22,6 @@ class RecommenderEngine():
 
         return None
         
-        
 
     def catalog(self, profile):
         tol = self.config["tol"]

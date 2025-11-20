@@ -39,4 +39,4 @@ def user_form():
         "profile_path": None
     }
 
-    return submitted
+    return submitted, user

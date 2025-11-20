@@ -3,7 +3,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
 from collections import Counter
-from utils.io_utils import load_data, save_pickle
+from utils.io_utils import load_data, save_pickle, load_pickle
 
 
 path = r"C:\Users\checc\OneDrive\Desktop\readability-navigator\data\processed\onestop_nltk_features.csv"
@@ -28,12 +28,16 @@ def sentences_embedding(sentences, model):
         truncate_dim = 512
                             )
     return embedding
-
 """
+def topic_embedding(topic_text, model):
+    embedding = model.encode([topic_text], truncate_dim=512)
+    return embedding[0].tolist()
+
+
 def similarity_embedding(embedding, model):     
     similarity = model.similarity(embedding, embedding)
     return similarity
-"""
+
 def clustering(df, embedding, k = 10, random_state = 42):
     kmeans = KMeans(n_clusters=k, random_state = random_state)
     labels = kmeans.fit_predict(embedding)
@@ -50,11 +54,15 @@ def cluster_label(df, k):
         for index, word in Counter(words).most_common(10):
             description[clusters_id] = common 
     
-    return description 
+    return description
+
+"""
+
+
         
 
-embedding = sentences_embedding(sentences, model)
-save_pickle('doc_embedding.pickle', embedding)
+#embedding = sentences_embedding(sentences, model)
+#save_pickle('doc_embedding.pickle', embedding)
 
 
 
