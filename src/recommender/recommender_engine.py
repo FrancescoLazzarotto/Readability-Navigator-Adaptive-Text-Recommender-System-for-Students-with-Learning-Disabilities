@@ -29,7 +29,6 @@ class RecommenderEngine():
         target = profile["target_readability"]
         history = set(profile["history"])
         df = self.df[~self.df["id"].isin(history)]
-        #df = self.df.query('id not in @history')
         df = df[np.abs(df["flesch_score"] - target) <= tol]
         return df
     
