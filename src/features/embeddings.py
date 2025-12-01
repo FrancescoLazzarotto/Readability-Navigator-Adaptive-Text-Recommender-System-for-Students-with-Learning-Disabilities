@@ -3,9 +3,10 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from bertopic import BERTopic
-from collections import Counter
 import matplotlib.pyplot as plt 
+from collections import Counter
 import sys
 import os 
 from umap import UMAP
@@ -68,24 +69,44 @@ def topic_model(df, emb):
 
     logger.info("HDBSCAN")
     hdbscan_model = HDBSCAN(min_cluster_size=10)
-
+    vectorizer_model = CountVectorizer(stop_words="english")
+    
     logger.info("BERTopic final")
     model = BERTopic(umap_model=umap_model,
-                     hdbscan_model=hdbscan_model)
+                     hdbscan_model=hdbscan_model,
+                     vectorizer_model=vectorizer_model)
     topics= model.fit_transform(text, emb)
     #model.get_topic_info()
-    model.visualize_document_datamap(text, embeddings=emb)
+    #model.visualize_document_datamap(text, embeddings=emb)
     return topics, model
+
+
+def visualize_document_data(df, model, emb):
+    return model.visualize_document_datamap(df, embeddings=emb)
 
 config = load_yaml() 
 rel_emb = config['paths']['embeddings_pickle']
 emb_path = os.path.join(PROJECT_ROOT, rel_emb)
 emb = load_pickle(emb_path)
+
 rel_df_path = config['paths']['features_csv'] 
 df_path = os.path.join(PROJECT_ROOT, rel_df_path) 
 df = load_csv(df_path) 
-topics, probs, model = topic_model(df, emb)
-model.get_topic_info()
+
+
+topics, model = topic_model(df, emb)
+fig = visualize_document_data(df['testo'], model, emb)
+output_path = r"C:\Users\checc\OneDrive\Desktop\readability-navigator\data\processed\datamap.png"
+
+try:
+    print("Tentativo di salvataggio immagine...")
+    fig.savefig(output_path , bbox_inches="tight") 
+    print(f"Immagine salvata correttamente in: {output_path}")
+except ValueError as e:
+    print("ERRORE: Assicurati di aver fatto 'pip install kaleido' nel terminale.")
+    print(f"Dettaglio errore: {e}")
+except Exception as e:
+    print(f"Errore generico durante il salvataggio: {e}")
 
 
 """

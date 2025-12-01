@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 class RecommenderEngine():
-    def __init__(self, df, embedding, config, user_id, profile_path, genre_description, kmeans):
+    def __init__(self, df, embedding, config, user_id, profile_path):
         self.df = df
         self.embedding = embedding
         self.config = config
